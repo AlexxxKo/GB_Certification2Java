@@ -37,7 +37,7 @@ public class ToyStore {
         }
     }
 
-    public Toy selectPrizeToy() {
+    public String selectPrizeToy() {
         int totalWeight = 0;
         for (Toy toy : toys) {
             totalWeight += toy.getWeight();
@@ -50,29 +50,36 @@ public class ToyStore {
         for (Toy toy : toys) {
             currentWeight += toy.getWeight();
             if (randomNumber < currentWeight) {
-                return toy;
+                selectedPrizeToys.add(toy.getName());
+                toy.decreaseQuantity();
+                if (toy.getQuantity() == 0) toys.remove(toy);
+                return toy.getName();
             }
         }
-
         return null;
     }
 
-    public void givePrizeToy() {
-        Toy prizeToy = selectPrizeToy();
+    public String givePrizeToy(String toyzName) {
+        String isPrize = null;
+        for (String prize : selectedPrizeToys) {
+            if (prize.equals(toyzName)) {
+                isPrize = prize;
+                break;
+            }
+        }
 
-        if (prizeToy != null) {
-            toys.remove(prizeToy);
+        if (isPrize != null) {
+            selectedPrizeToys.remove(isPrize);
 
             try {
                 FileWriter writer = new FileWriter("./toysRemoved.txt", true);
-                writer.write(prizeToy.toString() + "\n");
+                writer.write(isPrize + "\n");
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            prizeToy.decreaseQuantity();
         }
+        return isPrize;
     }
 
     public void print() {
@@ -82,6 +89,7 @@ public class ToyStore {
     }
 
     private List<Toy> toys;
+    private List<String> selectedPrizeToys = new ArrayList<>();
 
     public ToyStore() {
         toys = new ArrayList<>();
