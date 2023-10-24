@@ -32,10 +32,6 @@ public class Toy {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public int getWeight() {
         return weight;
     }

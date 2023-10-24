@@ -10,28 +10,10 @@ public class ToyStore {
         toys.add(toy);
     }
 
-    public void updateToyWeight(int toyName, int weight) {
+    public void updateToyWeight(String toyName, int weight) {
         for (Toy toy : toys) {
             if (toy.getName().equals(toyName)) {
                 toy.setWeight(weight);
-                break;
-            }
-        }
-    }
-
-    public Toy findToyByName(String toyName) {
-        for (Toy toy : toys) {
-            if (toy.getName().equals(toyName)) {
-                return toy;
-            }
-        }
-        return null;
-    }
-
-    public void updateToyQuantity(int toyName, int quantity) {
-        for (Toy toy : toys) {
-            if (toy.getName().equals(toyName)) {
-                toy.setQuantity(quantity);
                 break;
             }
         }
@@ -43,17 +25,19 @@ public class ToyStore {
             totalWeight += toy.getWeight();
         }
 
-        Random random = new Random();
-        int randomNumber = random.nextInt(totalWeight);
+        if (totalWeight > 0) {
+            Random random = new Random();
+            int randomNumber = random.nextInt(totalWeight);
 
-        int currentWeight = 0;
-        for (Toy toy : toys) {
-            currentWeight += toy.getWeight();
-            if (randomNumber < currentWeight) {
-                selectedPrizeToys.add(toy.getName());
-                toy.decreaseQuantity();
-                if (toy.getQuantity() == 0) toys.remove(toy);
-                return toy.getName();
+            int currentWeight = 0;
+            for (Toy toy : toys) {
+                currentWeight += toy.getWeight();
+                if (randomNumber < currentWeight) {
+                    selectedPrizeToys.add(toy.getName());
+                    toy.decreaseQuantity();
+                    if (toy.getQuantity() == 0) toys.remove(toy);
+                    return toy.getName();
+                }
             }
         }
         return null;
@@ -93,5 +77,9 @@ public class ToyStore {
 
     public ToyStore() {
         toys = new ArrayList<>();
+    }
+
+    public List<String> getSelectedPrizeToys() {
+        return selectedPrizeToys;
     }
 }
